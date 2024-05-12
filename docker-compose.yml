@@ -7,6 +7,14 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "ildar"
     volumes:
-      - ../db:/docker-entrypoint-initdb.d
+      - ./db/dump:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
