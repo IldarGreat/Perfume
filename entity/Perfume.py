@@ -3,8 +3,10 @@ class Perfume:
         self.id = None
         self.sex = None
         self.price = None
+        self.price_str = None
         self.price_type = None
         self.volume = None
+        self.volume_str = None
         self.comment = None
         self.name = None
         self.season = None
@@ -29,6 +31,19 @@ class Perfume:
         self.name = row[5]
         self.season = row[6]
         self.image = row[7]
+
+    def fill_from_perfume(self, item):
+        self.id = item.id
+        self.sex = item.sex
+        self.price = item.price
+        self.price_type = item.price_type
+        self.volume = item.volume
+        self.comment = item.comment
+        self.name = item.name
+        self.season = item.season
+        self.notes = item.notes
+        self.image = item.image
+        self.types = item.types
 
     @staticmethod
     def convert_price_range_to_string(price_range):
@@ -56,3 +71,14 @@ class Perfume:
             return float(data[1]), 999999
         else:
             return float(data[0]), float(data[2])
+
+    def convert_types_to_readable_format(self):
+        str_type = ''
+        if len(self.types) != 0:
+            if len(self.types) > 1:
+                delimeter = ', '
+            else:
+                delimeter = ' '
+            for type in self.types:
+                str_type += str(type[0]) + delimeter
+        return str_type

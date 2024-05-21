@@ -1,5 +1,5 @@
 import psycopg2
-
+from itertools import groupby
 from config import load_config
 from entity.Perfume import Perfume
 
@@ -60,10 +60,25 @@ def get_from_perfume(notes, price_low, price_high, type):
                     perfume.types = fetch_outer_data_from_perfume_id(perfume.id, 'types')
                     rows.append(perfume)
                     row = cur.fetchone()
-
+        grouped_parfumes = []
+        for key, group in groupby(sorted(rows, key=lambda x: x.name), lambda x: x.name):
+            str_price = ''
+            str_volume = ''
+            base_item = None
+            for item in group:
+                str_volume += str(round(item.volume)) + "/"
+                str_price += str(round(item.price)) + "/"
+                base_item = item
+            str_volume = str_volume[:-1]
+            str_price = str_price[:-1]
+            perfume = Perfume()
+            perfume.fill_from_perfume(base_item)
+            perfume.price_str = str_price
+            perfume.volume_str = str_volume
+            grouped_parfumes.append(perfume)
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    return rows
+    return grouped_parfumes
 
 
 def get_all_data_types(data='type'):
