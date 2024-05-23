@@ -16,10 +16,11 @@ product_question = """
 * Экстракт духов или концентрированные духи * - самый концентрированный и стойкий вид ароматического продукта с содержанием действующих компонентов от 30 до 55%. Стойкость таких духов может составлять до 24 часов.
 """
 
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.send_photo(message.chat.id,
-                   'https://github.com/IldarGreat/voluunterFront/blob/main/web/Untitled_Artwork-2_page-0001.jpg?raw=true', """
+                   'https://github.com/IldarGreat/voluunterFront/blob/main/web/start.jpg?raw=true', """
     Привет! Этот телеграм-бот создан для помощи в подборке идеального парфюма.
 Всё, что вам нужно сделать – ответить на 3 вопроса, которые предложит бот. 
 Ваши ответы помогут определить желаемые характеристики и сделать подборку парфюма исходя из ваших предпочтений 🤍
@@ -37,23 +38,43 @@ def begin(message):
         btn = types.KeyboardButton(Perfume.convert_price_range_to_string(price_range))
         markup.row(btn)
     bot.send_message(message.chat.id, "В рамках какого бюджета вы ищете парфюм?", reply_markup=markup)
-    bot.register_next_step_handler(message, price_click)
+    bot.register_next_step_handler(message, sex_click)
 
-
-def price_click(message, second_call=False):
+def sex_click(message, second_call=False):
     if second_call or any(
             message.text in s for s in Perfume.convert_prices_range_to_string(get_all_data_types('price'))):
         user = user_dict[message.chat.id]
         user.budget = message.text
         markup = types.ReplyKeyboardMarkup()
+        sexs = ['Для мужчины', 'Для женщины']
+        for sex in sexs:
+            btn = types.KeyboardButton(sex)
+            markup.row(btn)
+        bot.send_message(message.chat.id, "Для кого выбираете аромат?", reply_markup=markup)
+        bot.register_next_step_handler(message, price_click)
+    elif message.text == '/start':
+        del user_dict[message.chat.id]
+        send_welcome(message)
+    else:
+        bot.send_message(message.chat.id, f"Такой ценовой категории как {message.text} у нас нет")
+        price_click(message, True)
+
+def price_click(message, second_call=False):
+    if second_call or any(message.text in s for s in ['Для мужчины', 'Для женщины']):
+        user = user_dict[message.chat.id]
+        user.sex = message.text
+        markup = types.ReplyKeyboardMarkup()
         perfumes_types = get_all_data_types('type')
         for perfume_type in perfumes_types:
             btn = types.KeyboardButton(perfume_type)
             markup.row(btn)
-        bot.send_message(message.chat.id, product_question, reply_markup=markup,parse_mode='Markdown')
+        bot.send_message(message.chat.id, product_question, reply_markup=markup, parse_mode='Markdown')
         bot.register_next_step_handler(message, type_click)
+    elif message.text == '/start':
+        del user_dict[message.chat.id]
+        send_welcome(message)
     else:
-        bot.send_message(message.chat.id, f"Такой ценовой категории как {message.text} у нас нет")
+        bot.send_message(message.chat.id, f"Такого пола {message.text} нет")
         begin(message)
 
 
@@ -68,8 +89,11 @@ def type_click(message, second_call=False):
             markup.row(btn)
         bot.send_message(message.chat.id, "Какая категория ароматов вам нравится?", reply_markup=markup)
         bot.register_next_step_handler(message, search)
+    elif message.text == '/start':
+        del user_dict[message.chat.id]
+        send_welcome(message)
     else:
-        bot.send_message(message.chat.id, f"Такого типа продукта, как {message.text} у нас нет")
+        bot.send_message(message.chat.id, f"Такого пола {message.text} нет")
         price_click(message, True)
 
 
@@ -78,21 +102,28 @@ def search(message):
         user = user_dict[message.chat.id]
         user.note = message.text
         price_low, price_high = Perfume.convert_prices_range_from_string(user.budget)
-        perfumes = get_from_perfume(user.note, price_low, price_high, user.product)
+        if user.sex == 'Для мужчины':
+            sex = 'm'
+        else:
+            sex = 'f'
+        perfumes = get_from_perfume(user.note, price_low, price_high, user.product, sex)
         markup = types.ReplyKeyboardMarkup()
         btn = types.KeyboardButton('Найти еще раз')
         markup.row(btn)
         bot.send_message(message.chat.id, "Результат вашего запроса", reply_markup=markup)
         if len(perfumes) == 0:
             bot.send_photo(message.chat.id,
-                           'https://github.com/IldarGreat/voluunterFront/blob/main/web/Untitled_Artwork-2_page-0001.jpg?raw=true',
-                           f'Простите, но по вашему запросу:\nТип продукции:{user.product}\nБюджет:{user.budget}\nАромат:{user.note}\nНичего не найдено')
+                           'https://github.com/IldarGreat/voluunterFront/blob/main/web/not_found.jpg?raw=true',
+                           f'Простите, но по вашему запросу:\nТип продукции: {user.product}\nБюджет: {user.budget}\nАромат: {user.note}\n{user.sex}\nНичего не найдено')
         for perfume in perfumes:
             bot.send_photo(message.chat.id, perfume.image,
-                           f"*{perfume.name}*\n\nТип: {perfume.convert_types_to_readable_format()}\n\nОбъём: {perfume.volume_str} мл\n\nСтоимость: от {perfume.price_str} р\n\n{perfume.comment}",
-                           parse_mode='Markdown')
+                           f"<b>{perfume.name}</b>\n\n<b>Тип</b>: {perfume.convert_types_to_readable_format()}\n\n<b>Объём</b>: {perfume.volume_str} мл\n\n<b>Стоимость</b>: от {perfume.price_str} р\n\n{perfume.comment}",
+                           parse_mode='HTML')
         del user_dict[message.chat.id]
         bot.register_next_step_handler(message, begin)
+    elif message.text == '/start':
+        del user_dict[message.chat.id]
+        send_welcome(message)
     else:
         bot.send_message(message.chat.id, f'Такой категории аромата, как {message.text} у нас нет')
         type_click(message, True)

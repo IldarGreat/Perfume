@@ -81,4 +81,4 @@ class Perfume:
                 delimeter = ' '
             for type in self.types:
                 str_type += str(type[0]) + delimeter
-        return str_type
+        return str_type[:-2]

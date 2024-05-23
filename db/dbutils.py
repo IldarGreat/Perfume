@@ -36,7 +36,7 @@ def fetch_outer_data_from_perfume_id(perfume_id, mark='notes'):
     return rows
 
 
-def get_from_perfume(notes, price_low, price_high, type):
+def get_from_perfume(notes, price_low, price_high, type, sex):
     config = load_config()
     rows = []
     fetch_perfume = """
@@ -45,13 +45,13 @@ def get_from_perfume(notes, price_low, price_high, type):
     JOIN snap_v1.notes n on n.id = ntp.note_id
     JOIN snap_v1.type_to_perfume ttp on ttp.perfume_id = p.id
     JOIN snap_v1.type t on t.id = ttp.type_id
-    WHERE n.name in (%s) AND (p.price BETWEEN %s AND %s) AND t.name in (%s)
+    WHERE n.name in (%s) AND (p.price BETWEEN %s AND %s) AND t.name in (%s) AND p.sex in (%s, 'u')
     """
     try:
         with psycopg2.connect(**config) as conn:
             with conn.cursor() as cur:
                 cur.execute(fetch_perfume, (notes, price_low, price_high,
-                                            type))
+                                            type,sex))
                 row = cur.fetchone()
                 while row is not None:
                     perfume = Perfume()
