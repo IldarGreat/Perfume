@@ -81,4 +81,7 @@ class Perfume:
                 delimeter = ' '
             for type in self.types:
                 str_type += str(type[0]) + delimeter
-        return str_type[:-2]
+        if str_type[-1] == ',' or str_type[-2] == ',':
+            return str_type[:-2]
+        else:
+            return str_type
