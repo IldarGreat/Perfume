@@ -5,7 +5,7 @@
 -- Dumped from database version 12.18 (Ubuntu 12.18-0ubuntu0.20.04.1)
 -- Dumped by pg_dump version 12.18 (Ubuntu 12.18-0ubuntu0.20.04.1)
 
--- Started on 2024-05-23 22:02:16 +04
+-- Started on 2024-05-24 14:54:02 +04
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -219,13 +219,11 @@ INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (9, 'Цитрусовы
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (10, 'Фужерные');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (11, 'Кожаные');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (13, 'Мускусные');
-INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (14, 'Гурманские');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (15, 'Шипровые');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (16, 'Травяные');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (18, 'Табачные');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (19, 'Акватические');
 INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (20, 'Смолистые');
-INSERT INTO snap_v1.notes OVERRIDING SYSTEM VALUE VALUES (21, 'Шипровые ');
 
 
 --
@@ -313,13 +311,11 @@ INSERT INTO snap_v1.notes_to_perfume VALUES (61, 6);
 INSERT INTO snap_v1.notes_to_perfume VALUES (62, 6);
 INSERT INTO snap_v1.notes_to_perfume VALUES (63, 13);
 INSERT INTO snap_v1.notes_to_perfume VALUES (64, 8);
-INSERT INTO snap_v1.notes_to_perfume VALUES (64, 14);
 INSERT INTO snap_v1.notes_to_perfume VALUES (65, 7);
 INSERT INTO snap_v1.notes_to_perfume VALUES (66, 9);
 INSERT INTO snap_v1.notes_to_perfume VALUES (67, 10);
 INSERT INTO snap_v1.notes_to_perfume VALUES (68, 6);
 INSERT INTO snap_v1.notes_to_perfume VALUES (68, 2);
-INSERT INTO snap_v1.notes_to_perfume VALUES (69, 14);
 INSERT INTO snap_v1.notes_to_perfume VALUES (70, 2);
 INSERT INTO snap_v1.notes_to_perfume VALUES (70, 4);
 INSERT INTO snap_v1.notes_to_perfume VALUES (70, 6);
@@ -363,9 +359,7 @@ INSERT INTO snap_v1.notes_to_perfume VALUES (97, 6);
 INSERT INTO snap_v1.notes_to_perfume VALUES (97, 11);
 INSERT INTO snap_v1.notes_to_perfume VALUES (98, 6);
 INSERT INTO snap_v1.notes_to_perfume VALUES (98, 11);
-INSERT INTO snap_v1.notes_to_perfume VALUES (99, 14);
 INSERT INTO snap_v1.notes_to_perfume VALUES (99, 16);
-INSERT INTO snap_v1.notes_to_perfume VALUES (100, 14);
 INSERT INTO snap_v1.notes_to_perfume VALUES (100, 16);
 INSERT INTO snap_v1.notes_to_perfume VALUES (101, 2);
 INSERT INTO snap_v1.notes_to_perfume VALUES (102, 2);
@@ -379,6 +373,13 @@ INSERT INTO snap_v1.notes_to_perfume VALUES (105, 9);
 INSERT INTO snap_v1.notes_to_perfume VALUES (106, 3);
 INSERT INTO snap_v1.notes_to_perfume VALUES (106, 7);
 INSERT INTO snap_v1.notes_to_perfume VALUES (106, 9);
+INSERT INTO snap_v1.notes_to_perfume VALUES (4802, 15);
+INSERT INTO snap_v1.notes_to_perfume VALUES (4803, 15);
+INSERT INTO snap_v1.notes_to_perfume VALUES (4804, 15);
+INSERT INTO snap_v1.notes_to_perfume VALUES (64, 4);
+INSERT INTO snap_v1.notes_to_perfume VALUES (69, 4);
+INSERT INTO snap_v1.notes_to_perfume VALUES (99, 4);
+INSERT INTO snap_v1.notes_to_perfume VALUES (100, 4);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4655, 16);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4656, 16);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4657, 16);
@@ -564,9 +565,6 @@ INSERT INTO snap_v1.notes_to_perfume VALUES (4798, 11);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4799, 3);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4800, 3);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4801, 3);
-INSERT INTO snap_v1.notes_to_perfume VALUES (4802, 21);
-INSERT INTO snap_v1.notes_to_perfume VALUES (4803, 21);
-INSERT INTO snap_v1.notes_to_perfume VALUES (4804, 21);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4805, 10);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4805, 3);
 INSERT INTO snap_v1.notes_to_perfume VALUES (4806, 1);
@@ -2219,7 +2217,7 @@ ALTER TABLE ONLY snap_v1.type
     ADD CONSTRAINT type_pk PRIMARY KEY (id);
 
 
--- Completed on 2024-05-23 22:02:16 +04
+-- Completed on 2024-05-24 14:54:02 +04
 
 --
 -- PostgreSQL database dump complete
