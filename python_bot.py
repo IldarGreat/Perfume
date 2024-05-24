@@ -15,6 +15,13 @@ product_question = """
 * Духи * имеют концентрацию от 15 до 30% и сохраняют свою стойкость от 8 до 12 часов, поэтому больше подходят для вечерних мероприятий.\n
 * Экстракт духов или концентрированные духи * - самый концентрированный и стойкий вид ароматического продукта с содержанием действующих компонентов от 30 до 55%. Стойкость таких духов может составлять до 24 часов.
 """
+with open('aromat_question.txt', 'r') as file:
+    all_lines = file.readlines()
+    aromat_question = ''.join(all_lines)
+
+with open('aromat_question2.txt', 'r') as file:
+    all_lines = file.readlines()
+    aromat_question2 = ''.join(all_lines)
 
 
 @bot.message_handler(commands=['start'])
@@ -40,6 +47,7 @@ def begin(message):
     bot.send_message(message.chat.id, "В рамках какого бюджета вы ищете парфюм?", reply_markup=markup)
     bot.register_next_step_handler(message, sex_click)
 
+
 def sex_click(message, second_call=False):
     if second_call or any(
             message.text in s for s in Perfume.convert_prices_range_to_string(get_all_data_types('price'))):
@@ -58,6 +66,7 @@ def sex_click(message, second_call=False):
     else:
         bot.send_message(message.chat.id, f"Такой ценовой категории как {message.text} у нас нет")
         price_click(message, True)
+
 
 def price_click(message, second_call=False):
     if second_call or any(message.text in s for s in ['Для мужчины', 'Для женщины']):
@@ -87,7 +96,8 @@ def type_click(message, second_call=False):
         for note_type in notes_types:
             btn = types.KeyboardButton(note_type)
             markup.row(btn)
-        bot.send_message(message.chat.id, "Какая категория ароматов вам нравится?", reply_markup=markup)
+        bot.send_message(message.chat.id, aromat_question, parse_mode='HTML')
+        bot.send_message(message.chat.id, aromat_question2, reply_markup=markup, parse_mode='HTML')
         bot.register_next_step_handler(message, search)
     elif message.text == '/start':
         del user_dict[message.chat.id]
