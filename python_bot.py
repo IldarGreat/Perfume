@@ -6,7 +6,7 @@ from db.dbutils import get_from_perfume
 from entity.Perfume import *
 from entity.User import User
 
-bot = telebot.TeleBot('7078690317:AAENSHTCpgFHUApd667xHRZtaq5aRcxxNrs')
+bot = telebot.TeleBot('6451636842:AAHl7yY4OkIyC0Y2c9vLLz0koDPv5F5eYuw')
 user_dict = {}
 product_question = """
 Какой тип продукта вы хотите подобрать?\n
