@@ -3,12 +3,23 @@ import psycopg2
 
 from config import load_config
 
-data = pd.read_excel('data.xlsx')
+data = pd.read_excel('база.xlsx')
 names = []
 comments = []
 for i in range(len(data._values)):
     names.append((data._values[i])[0])
-    comments.append((data._values[i])[1])
+    text = (data._values[i])[1]
+    lines = text.split('\n')
+    if i == 156 or i ==157 or i == 277 or i ==278 or i ==327 or i==328:
+        high = lines[0].split(":")[1]
+        middle = lines[1].split(":")[1]
+        formatted_text = "<b>Верхние ноты</b>:" + high + "\n" + "<b>Средние ноты</b>:" + middle
+    else:
+        high = lines[0].split(":")[1]
+        middle = lines[1].split(":")[1]
+        base = lines[2].split(":")[1]
+        formatted_text = "<b>Верхние ноты</b>:" + high + "\n" + "<b>Средние ноты</b>:" + middle + "\n" + "<b>Базовые ноты</b>:" + base
+    comments.append(formatted_text)
 
 config = load_config()
 insert_name_sql = 'insert into snap_v1.perfume(name) values (%s) RETURNING id;'
